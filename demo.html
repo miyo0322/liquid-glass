@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Liquid Glass 模块演示</title>
+<link rel="stylesheet" href="liquid-glass.css">
+<style>
+html,body{margin:0;height:100%;background:#0e1216;color:#e4e6ea;font:15px/1.5 -apple-system,"PingFang SC",sans-serif}
+.bg{position:fixed;inset:0;background:
+  radial-gradient(40% 30% at 20% 25%,#3f6c9a,transparent 70%),
+  radial-gradient(35% 30% at 80% 60%,#9a5a6c,transparent 70%),
+  repeating-linear-gradient(90deg,rgba(255,255,255,.06) 0 2px,transparent 2px 36px),#0e1216}
+.card{position:fixed;left:24px;right:24px;top:90px;padding:24px;border-radius:28px}
+.dock{position:fixed;left:20px;right:20px;bottom:28px;height:56px;border-radius:28px;display:flex;align-items:center;padding:0 22px;color:var(--text-dim)}
+.h-btn{position:fixed;top:24px;right:24px;width:44px;height:44px;border-radius:50%;border:0;color:var(--text-main)}
+</style></head><body>
+<div class="bg"></div>
+<div class="card" data-glass>拖动、按住这些玻璃元素。<br>data-glass 属性 = 启用液体玻璃。</div>
+<button class="h-btn" data-glass>⚙</button>
+<div class="dock" id="dock" data-glass>跟它说点什么……</div>
+<script src="liquid-glass.js"></script>
+<script>
+  GlassMotion.init(); LiquidGlass.init(); GlassLens.init();
+  applyGlassIntensity(38);
+</script></body></html>
