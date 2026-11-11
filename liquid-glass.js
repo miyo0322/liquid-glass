@@ -412,7 +412,7 @@ void main(){
     if(glc.width<W||glc.height<H){glc.width=Math.max(glc.width,W);glc.height=Math.max(glc.height,H);}
     gl.viewport(0,0,W,H);
     gl.useProgram(prog);
-    gl.uniform2f(U.uRes,W,H);gl.uniform2f(U.uOrig,P.mx||0,P.mx||0);gl.uniform1f(U.uDpr,P.dpr);
+    gl.uniform2f(U.uRes,W,H);gl.uniform2f(U.uOrig,P.mx||0,P.my||0);gl.uniform1f(U.uDpr,P.dpr);
     gl.uniform2f(U.uSize,P.w,P.h);
     const r=P.rad||[0,0,0,0];gl.uniform4f(U.uRad,r[0],r[1],r[2],r[3]);
     gl.uniform1f(U.uBaseOn,P.base?1:0);
@@ -661,6 +661,7 @@ void main(){
   }
   /* 画一个元素；返回是否还需要续帧 */
   function paintEl(st){
+    /* 位置只在这次绘制开头量一次，buildShapes 与光源换算都复用，避免每帧多一次布局 */
     const r=st.el.getBoundingClientRect();
     const sx=st.w/(r.width||1),sy=st.h/(r.height||1);
     const P=prof(),pr=st.press;
@@ -809,7 +810,13 @@ void main(){
   /* ---------- 档位切换 / 入口 ---------- */
   function afterTierChange(){
     /* 模糊倍率随档位变：让设置里的滑块映射重算一遍 */
-    try{if(typeof applyGlassIntensity==='function'&&typeof a11y!=='undefined')applyGlassIntensity(a11y.glass);}catch(_){}
+    /* 浓度取全局无障碍设置里的 a11y.glass；本层没这层数据就用 CSS 变量解析出的 I.o 兜底 */
+    try{
+      if(typeof applyGlassIntensity==='function'){
+        const g=(typeof a11y!=='undefined'&&a11y&&Number.isFinite(a11y.glass))?a11y.glass:I.o*100;
+        applyGlassIntensity(Math.max(0,Math.min(100,g)));
+      }
+    }catch(_){}
   }
   function applyTier(t){
     if(t===tier||TIERS.indexOf(t)<0)return;
